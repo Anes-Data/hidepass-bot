@@ -1,5 +1,5 @@
 # 1. استخدام بيئة Go الرسمية لبناء الكود (Build Stage)
-FROM golang:1.21-alpine AS builder
+FROM golang:alpine AS builder
 
 # تحديد مجلد العمل داخل الحاوية
 WORKDIR /app
