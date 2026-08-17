@@ -19,7 +19,7 @@ const (
 	MaxFileSize          = 10 * 1024 * 1024
 	SessionIdleTimeout   = 1 * time.Hour
 	fileDownloadTimeout  = 30 * time.Second
-	minPassphraseLength  = 8
+	
 )
 
 var httpClient = &http.Client{
