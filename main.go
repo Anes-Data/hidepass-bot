@@ -16,9 +16,10 @@ import (
 )
 
 const (
-	MaxFileSize         = 10 * 1024 * 1024
-	SessionIdleTimeout  = 1 * time.Hour
-	fileDownloadTimeout = 30 * time.Second
+	MaxFileSize          = 10 * 1024 * 1024
+	SessionIdleTimeout   = 1 * time.Hour
+	fileDownloadTimeout  = 30 * time.Second
+	minPassphraseLength  = 8
 )
 
 var httpClient = &http.Client{
@@ -77,7 +78,7 @@ var (
 		".jpg":  {0xFF, 0xD8, 0xFF},
 		".jpeg": {0xFF, 0xD8, 0xFF},
 		".png":  {0x89, 0x50, 0x4E, 0x47},
-		".pdf":  {0x25, 0x50, 0x44, 0x46},
+		".pdf":  {0x25, 0x50, 0x44},
 		".docx": {0x50, 0x4B, 0x03, 0x04},
 	}
 )
@@ -156,6 +157,23 @@ func isFileRateLimited(sess *UserSession) bool {
 }
 
 func main() {
+	// 1. خادم HTTP مصغر لإرضاء Port Check في Render
+	go func() {
+		port := os.Getenv("PORT")
+		if port == "" {
+			port = "8080"
+		}
+		http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("OK"))
+		})
+		log.Printf("HTTP health check server listening on port %s", port)
+		if err := http.ListenAndServe(":"+port, nil); err != nil {
+			log.Printf("HTTP server error: %v", err)
+		}
+	}()
+
+	// 2. تشغيل البوت
 	botToken := os.Getenv("BOT_TOKEN")
 	if botToken == "" {
 		log.Fatal("BOT_TOKEN environment variable is required. Set it before running the bot.")
@@ -468,15 +486,3 @@ func downloadFile(bot *tgbotapi.BotAPI, fileID string, defaultName string) ([]by
 
 	return data, defaultName, nil
 }
-
-go func() {
-    port := os.Getenv("PORT")
-    if port == "" {
-        port = "8080"
-    }
-    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        w.WriteHeader(http.StatusOK)
-        w.Write([]string("OK"))
-    })
-    http.ListenAndServe(":"+port, nil)
-}()
