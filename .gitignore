@@ -1,0 +1,22 @@
+stego-crypto-bot.exe
+
+# Sensitive Environment Files
+.env
+*.env
+
+# Executables & Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+main
+*.bin
+
+# Log Files
+*.log
+
+# IDE & OS Specific Files
+.DS_Store
+.idea/
+.vscode/
