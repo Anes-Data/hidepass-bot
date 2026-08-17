@@ -468,3 +468,15 @@ func downloadFile(bot *tgbotapi.BotAPI, fileID string, defaultName string) ([]by
 
 	return data, defaultName, nil
 }
+
+go func() {
+    port := os.Getenv("PORT")
+    if port == "" {
+        port = "8080"
+    }
+    http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+        w.WriteHeader(http.StatusOK)
+        w.Write([]string("OK"))
+    })
+    http.ListenAndServe(":"+port, nil)
+}()
