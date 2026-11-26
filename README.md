@@ -34,7 +34,7 @@ HidePass Bot is a secure Telegram bot written in **Go** that enables users to em
 ```bash
 # Clone the repository
 git clone [https://github.com/Anes-Data/hidepass-bot.git](https://github.com/Anes-Data/hidepass-bot.git)
-cd hidepass-bot
+cd hidepass-bot 
 
 # Install dependencies
 go mod download
